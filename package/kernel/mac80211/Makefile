@@ -385,6 +385,8 @@ endef
 
 
 define KernelPackage/cfg80211/install
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/wireless.config $(1)/etc/config/wireless
 	$(INSTALL_DIR) $(1)/lib/wifi $(1)/lib/netifd/wireless
 	$(INSTALL_DATA) ./files/lib/wifi/mac80211.sh $(1)/lib/wifi
 	$(INSTALL_BIN) ./files/lib/netifd/wireless/mac80211.sh $(1)/lib/netifd/wireless
