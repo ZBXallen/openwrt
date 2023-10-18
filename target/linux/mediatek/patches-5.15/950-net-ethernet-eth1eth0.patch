@@ -1,0 +1,11 @@
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c	2023-10-06 10:04:03.987065327 +0800
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c	2023-10-06 11:15:03.837273913 +0800
+@@ -5084,7 +5084,7 @@
+ 			goto err_deinit_ppe;
+ 	}
+ 
+-	for (i = 0; i < MTK_MAX_DEVS; i++) {
++	for (i = 1; i > -1 ; i--) {
+ 		if (!eth->netdev[i])
+ 			continue;
+ 
