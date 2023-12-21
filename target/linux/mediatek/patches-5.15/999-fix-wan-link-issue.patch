@@ -1,5 +1,14 @@
 --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
 +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -838,7 +838,7 @@
+ 		mcr |= MAC_MCR_SPEED_1000;
+ 		break;
+ 	case SPEED_100:
+-		mcr |= MAC_MCR_SPEED_100;
++		mcr |= MAC_MCR_SPEED_1000;
+ 		break;
+ 	}
+ 
 @@ -905,8 +905,28 @@
  				    tx_pause, rx_pause);
  }

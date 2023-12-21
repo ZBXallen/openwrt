@@ -14,6 +14,9 @@
 		#size-cells = <1>;
 		compatible = "spi-nand";
 		reg = <1>;
+        	mediatek,nmbm;
+        	mediatek,bmt-max-ratio = <1>;
+        	mediatek,bmt-max-reserved-blocks = <64>;
 		spi-max-frequency = <10000000>;
 		spi-tx-buswidth = <4>;
 		spi-rx-buswidth = <4>;
@@ -25,7 +28,6 @@
 			partition@0 {
 				label = "BL2";
 				reg = <0x00000 0x0100000>;
-				read-only;
 			};
 			partition@100000 {
 				label = "u-boot-env";
