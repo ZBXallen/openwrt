@@ -142,6 +142,28 @@ platform_do_upgrade() {
 		CI_ROOT_UBIPART=ubi
 		nand_do_upgrade "$1"
 		;;
+	unielec,u7981)
+		local rootdev="$(cmdline_get_var root)"
+		rootdev="${rootdev##*/}"
+		rootdev="${rootdev%p[0-9]*}"
+		case "$rootdev" in
+		mmc*)
+			CI_ROOTDEV="$rootdev"
+			CI_KERNPART="kernel"
+			# CI_KERNPART="production"
+			CI_ROOTPART="rootfs"
+			emmc_do_upgrade "$1"
+			;;
+		mtdblock*)
+			PART_NAME="fit"
+			default_do_upgrade "$1"
+			;;
+		ubiblock*)
+			CI_KERNPART="fit"
+			nand_do_upgrade "$1"
+			;;
+		esac
+		;;
 	*)
 		nand_do_upgrade "$1"
 		;;

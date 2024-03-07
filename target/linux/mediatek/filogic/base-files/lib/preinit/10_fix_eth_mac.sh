@@ -21,6 +21,18 @@ preinit_set_mac_address() {
 		addr=$(get_mac_binary "/tmp/tp_data/default-mac" 0)
 		ip link set dev eth1 address "$(macaddr_add $addr 1)"
 		;;
+	unielec,u7981)
+		case "$(cmdline_get_var root)" in
+		/dev/mmc*)
+			addr=$(mmc_get_mac_binary factory 0x1000)
+			;;
+		*)
+			addr=$(mtd_get_mac_binary factory 0x1000)
+			;;
+		esac
+		ip link set dev eth0 address "$addr"
+		ip link set dev eth1 address "$(macaddr_add $addr 1)"
+		;;
 	*)
 		;;
 	esac

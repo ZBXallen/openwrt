@@ -46,7 +46,7 @@ define Build/mt798x-gpt
 			-t 0x2e -N production		-p $(CONFIG_TARGET_ROOTFS_PARTSIZE)M@64M \
 		) \
 		$(if $(findstring emmc,$1), \
-			-t 0x2e -N production		-p $(CONFIG_TARGET_ROOTFS_PARTSIZE)M@64M \
+			-t 0x2e -N kernel		-p $(CONFIG_TARGET_ROOTFS_PARTSIZE)M@64M \
 		)
 	cat $@.tmp >> $@
 	rm $@.tmp
@@ -674,6 +674,38 @@ define Device/ubnt_unifi-6-plus
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += ubnt_unifi-6-plus
+
+define Device/unielec_u7981
+  DEVICE_VENDOR := Unielec
+  DEVICE_MODEL := U7981
+  DEVICE_DTS := mt7981b-unielec-u7981
+  DEVICE_DTS_OVERLAY := mt7981b-unielec-u7981-emmc mt7981b-unielec-u7981-nand
+  DEVICE_DTS_DIR := ../dts
+  DEVICE_DTC_FLAGS := --pad 4096
+  DEVICE_DTS_LOADADDR := 0x43f00000
+  DEVICE_PACKAGES := kmod-mt7981-firmware mt7981-wo-firmware kmod-usb3 e2fsprogs f2fsck mkf2fs fdisk partx-utils
+  KERNEL_LOADADDR := 0x44000000
+  KERNEL := kernel-bin | gzip
+  KERNEL_INITRAMFS := kernel-bin | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb with-initrd | pad-to 64k
+  KERNEL_INITRAMFS_SUFFIX := -recovery.itb
+  KERNEL_IN_UBI := 1
+  UBOOTENV_IN_UBI := 1
+  IMAGES := sysupgrade.itb
+  IMAGE_SIZE := $$(shell expr 64 + $$(CONFIG_TARGET_ROOTFS_PARTSIZE))m
+  IMAGE/sysupgrade.itb := append-kernel | \
+	 fit gzip $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb external-with-rootfs | \
+	 pad-rootfs | append-metadata
+  ARTIFACTS := \
+  emmc-gpt.bin emmc-preloader.bin emmc-bl31-uboot.fip \
+  nand-preloader.bin nand-bl31-uboot.fip
+  ARTIFACT/emmc-gpt.bin := mt798x-gpt emmc
+  ARTIFACT/emmc-preloader.bin := mt7981-bl2 emmc-ddr3
+  ARTIFACT/emmc-bl31-uboot.fip := mt7981-bl31-uboot unielec_u7981-emmc
+  ARTIFACT/nand-preloader.bin := mt7981-bl2 spim-nand-ddr3
+  ARTIFACT/nand-bl31-uboot.fip := mt7981-bl31-uboot unielec_u7981-nand
+endef
+TARGET_DEVICES += unielec_u7981
 
 define Device/xiaomi_mi-router-wr30u-112m-nmbm
   DEVICE_VENDOR := Xiaomi
