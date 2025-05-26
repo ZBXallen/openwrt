@@ -96,15 +96,12 @@
 			reg = <5>;
 		};
 
-		phy15: phy@15 {
-			compatible = "ethernet-phy-id03a2.a411";
-			reg = <15>;
-			phy-mode = "2500base-x";
-			full-duplex;
-			pause;
-/*
+		phy6: phy@6 {
+			compatible = "ethernet-phy-id67c9.de0a";
+			reg = <6>;
+
 			mxl,led-config = <0x3f0 0 0 0>;
-*/
+
 			reset-gpios = <&pio 6 1>;
                         reset-deassert-us = <20000>;
 		};
@@ -175,7 +172,7 @@
 &gmac1 {
         phy-mode = "2500base-x";
         phy-connection-type = "2500base-x";
-        phy-handle = <&phy15>;
+        phy-handle = <&phy6>;
 };
 
 &wifi {
